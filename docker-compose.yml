@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    command: >
+      sh -c "python datastore.py"
+    volumes:
+      - .:/app
+    environment:
+      - DATASTORE_EMULATOR_HOST=datastore:8001
+      - DATASTORE_PROJECT_ID=local-dev
+      - GOOGLE_CLOUD_PROJECT=local-dev
+    depends_on:
+      - datastore
+
+  datastore:
+    build:
+      context: ./docker/datastore
+    volumes:
+      - ./data:/data
+    environment:
+      - DATASTORE_PROJECT_ID=local-dev
